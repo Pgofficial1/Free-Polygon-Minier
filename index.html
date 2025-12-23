@@ -2,209 +2,177 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Free Matic Mining</title>
+<title>Free Polygon Miner</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
-  margin: 0;
+body{
+  margin:0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(180deg, #5a189a, #7b2cbf);
-  color: white;
+  background: linear-gradient(180deg,#4a148c,#6a1b9a);
+  color:#fff;
 }
 
-/* HEADER */
-.header {
-  text-align: center;
-  padding: 20px;
+/* TOP OFFERS */
+.section{
+  padding:15px;
 }
-.balance {
-  background: rgba(255,255,255,0.1);
-  border-radius: 15px;
-  padding: 15px;
-  margin-top: 10px;
-}
-.balance h2 {
-  color: gold;
-  margin: 0;
+.section h3{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-/* MINING CARD */
-.card {
-  background: rgba(255,255,255,0.12);
-  border-radius: 20px;
-  padding: 20px;
-  margin: 15px;
+.offer{
+  border-radius:16px;
+  padding:15px;
+  margin-bottom:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
+.offer.green{background:#0f9d58;}
+.offer.blue{background:#1e88e5;}
 
-/* MINING POWER */
-.power-bars {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin: 15px 0;
-}
-.bar {
-  width: 40px;
-  height: 70px;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.2);
-}
-.bar.active {
-  background: #4cc9f0;
-}
+.offer small{opacity:.8}
 
-/* OFFERS */
-.offer {
-  display: flex;
-  align-items: center;
-  background: #8e44ad;
-  border-radius: 15px;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-.offer img {
-  width: 45px;
-  height: 45px;
-  border-radius: 10px;
-  margin-right: 10px;
-}
-.offer span {
-  flex: 1;
+.offer button{
+  background:#fff;
+  border:none;
+  padding:6px 14px;
+  border-radius:12px;
+  font-weight:bold;
 }
 
 /* ADMIN PANEL */
-.admin {
-  background: #240046;
-  padding: 15px;
-  border-radius: 20px;
-  margin: 15px;
+.admin-panel{
+  background:#2d004d;
+  padding:15px;
+  border-radius:18px;
+  margin:15px;
 }
-.admin input {
-  width: 100%;
-  margin-bottom: 8px;
-  padding: 8px;
-  border-radius: 8px;
-  border: none;
+.admin-panel input{
+  width:100%;
+  margin-bottom:8px;
+  padding:8px;
+  border-radius:10px;
+  border:none;
 }
-.admin button {
-  width: 100%;
-  padding: 10px;
-  background: #4cc9f0;
-  border: none;
-  border-radius: 10px;
-  font-weight: bold;
+.admin-panel button{
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:12px;
+  background:#ffb703;
+  font-weight:bold;
 }
-
-/* NAV */
-.nav {
-  display: flex;
-  justify-content: space-around;
-  background: #3c096c;
-  padding: 10px;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+.remove-btn{
+  background:#ff4d4d;
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  padding:5px 10px;
+  margin-left:8px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <h1>FREE MATIC MINING</h1>
-  <div class="balance">
-    <p>Your Balance</p>
-    <h2>0.0000 MATIC</h2>
-  </div>
-  <p>Environmental friendly mining</p>
+<!-- ===== TOP OFFERS (USER VIEW) ===== -->
+<div class="section">
+  <h3>🎁 Top Offers <span style="opacity:.7">Earn Extra MATIC</span></h3>
+  <div id="offersList"></div>
 </div>
 
-<!-- MINING POWER -->
-<div class="card">
-  <h3 style="text-align:center;">Mining Power</h3>
-  <div class="power-bars" id="powerBars"></div>
-  <p style="text-align:center;color:gold;">Mining stopped</p>
-</div>
+<!-- ===== ADMIN PANEL (ADMIN ONLY) ===== -->
+<div class="admin-panel" id="adminPanel" style="display:none;">
+  <h3>🔒 Admin – Manage Offers</h3>
 
-<!-- TOP OFFERS -->
-<div class="card">
-  <h3>🎁 Top Offers</h3>
-  <div id="offers"></div>
-</div>
+  <input id="name" placeholder="Offer name">
+  <input id="desc" placeholder="Offer description">
+  <input id="reward" placeholder="Reward e.g +0.001 MATIC">
+  <input id="link" placeholder="Redirect link (https://...)">
 
-<!-- ADMIN PANEL -->
-<div class="admin">
-  <h3>🔒 Admin Panel</h3>
-  <input type="text" id="offerTitle" placeholder="Offer title">
-  <input type="text" id="offerReward" placeholder="Reward e.g +0.01 MATIC">
-  <input type="text" id="offerImage" placeholder="Image URL">
   <button onclick="addOffer()">Add Offer</button>
 </div>
 
-<!-- NAV -->
-<div class="nav">
-  <span>Home</span>
-  <span>Mining</span>
-  <span>Wallet</span>
-  <span>Referrals</span>
-</div>
-
 <script>
-/* MINING POWER (5 rooms) */
-let power = 2; // badilisha level hapa (0–5)
-const powerBars = document.getElementById("powerBars");
+/* ========= ADMIN CHECK ========= */
+const IS_ADMIN = true; // badilisha false kwa user wa kawaida
 
-for (let i = 1; i <= 5; i++) {
-  const bar = document.createElement("div");
-  bar.className = "bar" + (i <= power ? " active" : "");
-  powerBars.appendChild(bar);
+if(IS_ADMIN){
+  document.getElementById("adminPanel").style.display = "block";
 }
 
-/* OFFERS STORAGE */
+/* ========= OFFERS DATA ========= */
 let offers = JSON.parse(localStorage.getItem("offers")) || [
   {
-    title: "Join the Channel",
-    reward: "+0.015 MATIC",
-    img: "https://cdn-icons-png.flaticon.com/512/2111/2111646.png"
+    name:"Join Telegram",
+    desc:"Connect with community",
+    reward:"+0.001 MATIC",
+    link:"https://t.me/",
+    color:"green"
+  },
+  {
+    name:"Visit Site",
+    desc:"Complete quick task",
+    reward:"+0.0008 MATIC",
+    link:"https://example.com",
+    color:"blue"
   }
 ];
 
-function renderOffers() {
-  const container = document.getElementById("offers");
-  container.innerHTML = "";
-  offers.forEach((o, i) => {
+function renderOffers(){
+  const box = document.getElementById("offersList");
+  box.innerHTML = "";
+
+  offers.forEach((o,i)=>{
     const div = document.createElement("div");
-    div.className = "offer";
+    div.className = "offer "+o.color;
     div.innerHTML = `
-      <img src="${o.img}">
-      <span>${o.title}<br><small>${o.reward}</small></span>
-      <button onclick="removeOffer(${i})">❌</button>
+      <div>
+        <strong>${o.name}</strong><br>
+        <small>${o.desc}</small>
+      </div>
+      <div>
+        <strong>${o.reward}</strong><br>
+        <button onclick="openOffer('${o.link}')">Claim</button>
+        ${IS_ADMIN ? `<button class="remove-btn" onclick="removeOffer(${i})">X</button>` : ``}
+      </div>
     `;
-    container.appendChild(div);
+    box.appendChild(div);
   });
+
+  localStorage.setItem("offers",JSON.stringify(offers));
 }
 
-function addOffer() {
-  const title = offerTitle.value;
-  const reward = offerReward.value;
-  const img = offerImage.value;
+function openOffer(link){
+  window.open(link,"_blank");
+}
 
-  if (!title || !reward || !img) return alert("Fill all fields");
+function addOffer(){
+  const name = document.getElementById("name").value;
+  const desc = document.getElementById("desc").value;
+  const reward = document.getElementById("reward").value;
+  const link = document.getElementById("link").value;
 
-  offers.push({ title, reward, img });
-  localStorage.setItem("offers", JSON.stringify(offers));
+  if(!name || !desc || !reward || !link){
+    alert("Fill all fields");
+    return;
+  }
+
+  offers.push({
+    name, desc, reward, link,
+    color: offers.length % 2 === 0 ? "green" : "blue"
+  });
+
+  document.querySelectorAll(".admin-panel input").forEach(i=>i.value="");
   renderOffers();
-
-  offerTitle.value = "";
-  offerReward.value = "";
-  offerImage.value = "";
 }
 
-function removeOffer(i) {
-  offers.splice(i, 1);
-  localStorage.setItem("offers", JSON.stringify(offers));
+function removeOffer(i){
+  offers.splice(i,1);
   renderOffers();
 }
 
