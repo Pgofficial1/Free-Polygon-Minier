@@ -86,10 +86,10 @@ button{
 </div>
 
 <div class="footer">
-  <div>🏠<br>Home</div>
-  <div>⚡<br>Mining</div>
-  <div>💼<br>Wallet</div>
-  <div>👥<br>Referrals</div>
+  <div id="btnHome">🏠<br>Home</div>
+  <div id="btnMining">⚡<br>Mining</div>
+  <div id="btnWallet">💼<br>Wallet</div>
+  <div id="btnReferrals">👥<br>Referrals</div>
 </div>
 
 <script>
@@ -137,6 +137,12 @@ withdrawBtn.addEventListener("click",()=>{
   // Placeholder for FaucetPay API integration
   alert("Withdraw request ready. Integrate with FaucetPay API to process.");
 });
+
+// Footer navigation
+document.getElementById("btnHome").addEventListener("click",()=>{window.location.href="index.html";});
+document.getElementById("btnMining").addEventListener("click",()=>{window.location.href="power.html";});
+document.getElementById("btnWallet").addEventListener("click",()=>{window.location.href="wallet.html";});
+document.getElementById("btnReferrals").addEventListener("click",()=>{window.location.href="referrals.html";});
 </script>
 
 </body>
