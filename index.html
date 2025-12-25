@@ -4,145 +4,78 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Free Polygon Miner</title>
-
 <style>
 body{
   margin:0;
-  font-family:system-ui, -apple-system, BlinkMacSystemFont;
-  background:linear-gradient(180deg,#4b168d,#6a2bbf);
+  font-family:Arial, sans-serif;
+  background:#0b0f1a;
   color:#fff;
 }
-
-/* HEADER (IMEONGEZWA TU) */
-.header{
-  position:fixed;
-  top:0;
-  left:0;
-  right:0;
-  background:#3a0d6f;
-  text-align:center;
-  padding:12px 0;
-  font-weight:700;
-  z-index:1000;
-}
-
 .container{
-  padding:16px;
-  padding-top:64px;   /* nafasi ya header */
+  padding:15px;
   max-width:480px;
   margin:auto;
 }
-
-.card{
-  background:rgba(255,255,255,0.08);
-  border-radius:18px;
-  padding:16px;
-  margin-bottom:16px;
-}
-
-.balance{
-  font-size:34px;
-  font-weight:700;
-  color:#ffd84d;
-}
-
-.mining-power{
-  display:flex;
-  gap:8px;
-}
-
-.power{
-  flex:1;
-  background:#2ecc71;
-  border-radius:10px;
-  padding:14px 0;
+h2{
   text-align:center;
+  margin-bottom:15px;
 }
-
-.start-btn{
-  width:100%;
-  background:linear-gradient(90deg,#ffcc00,#ff8800);
-  border:none;
-  padding:14px;
-  border-radius:14px;
-  font-size:18px;
-  font-weight:700;
+.card{
+  background:#151a2e;
+  padding:15px;
+  border-radius:10px;
+  margin-bottom:15px;
 }
-
 .offer{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  background:rgba(255,255,255,0.12);
-  padding:12px;
-  border-radius:14px;
+  background:#1c2240;
+  padding:10px;
+  border-radius:8px;
   margin-bottom:10px;
 }
-
 .offer button{
-  background:#2ecc71;
+  background:#4caf50;
   border:none;
-  padding:8px 14px;
-  border-radius:10px;
+  padding:8px 12px;
   color:#fff;
+  border-radius:6px;
+  cursor:pointer;
 }
-
-/* FOOTER (ICONS TU ZIMEONGEZWA) */
 .footer{
-  display:flex;
-  justify-content:space-around;
   position:fixed;
   bottom:0;
   left:0;
   right:0;
-  background:#3a0d6f;
+  background:#11162a;
+  display:flex;
+  justify-content:space-around;
   padding:10px 0;
+  border-top:1px solid #222;
 }
-
 .footer div{
   text-align:center;
-  font-size:12px;
+  font-size:13px;
 }
 </style>
 </head>
-
 <body>
-
-<!-- HEADER -->
-<div class="header">
-  FREE POLYGON MINER
-</div>
 
 <div class="container">
 
-  <!-- BALANCE -->
-  <div class="card">
-    <div>Your Balance</div>
-    <div class="balance" id="balance">0.00000 MATIC</div>
-  </div>
+  <!-- HEADER -->
+  <h2>FREE POLYGON MINER</h2>
 
   <!-- MINING POWER -->
   <div class="card">
-    <div style="margin-bottom:8px;">Mining Power (5/5)</div>
-    <div class="mining-power">
-      <div class="power">⚡</div>
-      <div class="power">⚡</div>
-      <div class="power">⚡</div>
-      <div class="power">⚡</div>
-      <div class="power">⚡</div>
-    </div>
-  </div>
-
-  <!-- START MINING -->
-  <div class="card">
-    <h3>Ready to Mine</h3>
-    <p>Tap to start mining</p>
-    <button class="start-btn">Start Mining</button>
+    <strong>⚡ Mining Power</strong>
+    <p>Rooms unlocked: 5 / 5</p>
   </div>
 
   <!-- TOP OFFERS -->
   <div class="card">
-    <h3>🎁 Top Offers</h3>
+    <strong>🔥 Top Offers</strong>
     <div id="offers"></div>
   </div>
 
@@ -162,22 +95,26 @@ const offersDiv = document.getElementById("offers");
 
 function renderOffers(){
   offersDiv.innerHTML = "";
-  offers.forEach(o=>{
+  if(offers.length === 0){
+    offersDiv.innerHTML = "<p>No offers available</p>";
+    return;
+  }
+  offers.forEach((o)=>{
     const div = document.createElement("div");
-    div.className="offer";
-    div.innerHTML=`
+    div.className = "offer";
+    div.innerHTML = `
       <div>
         <strong>${o.name}</strong><br>
         <small>${o.reward}</small>
       </div>
-      <button onclick="goOffer('${o.link}')">Start</button>
+      <button onclick="goOffer('${encodeURIComponent(o.link)}')">Start</button>
     `;
     offersDiv.appendChild(div);
   });
 }
 
 function goOffer(link){
-  window.open(link,"_blank");
+  window.open(decodeURIComponent(link), "_blank");
 }
 
 renderOffers();
