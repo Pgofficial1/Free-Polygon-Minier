@@ -87,10 +87,10 @@ input{
 </div>
 
 <div class="footer">
-  <div>🏠<br>Home</div>
-  <div>⚡<br>Mining</div>
-  <div>💼<br>Wallet</div>
-  <div>👥<br>Referrals</div>
+  <div id="btnHome">🏠<br>Home</div>
+  <div id="btnMining">⚡<br>Mining</div>
+  <div id="btnWallet">💼<br>Wallet</div>
+  <div id="btnReferrals">👥<br>Referrals</div>
 </div>
 
 <script>
@@ -115,37 +115,3 @@ let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [
   {telegramId:"1003",referrals:10,reward:3},
   {telegramId:"1004",referrals:8,reward:2},
   {telegramId:"1005",referrals:5,reward:1},
-  {telegramId:"1006",referrals:3,reward:1},
-  {telegramId:"1007",referrals:2,reward:1},
-  {telegramId:"1008",referrals:1,reward:1},
-  {telegramId:"1009",referrals:1,reward:1},
-  {telegramId:"1010",referrals:1,reward:1},
-];
-
-const lbDiv = document.getElementById("leaderboard");
-function renderLeaderboard(){
-  lbDiv.innerHTML="";
-  leaderboard.forEach((u,i)=>{
-    const div = document.createElement("div");
-    div.innerHTML = `${i+1}. ${u.telegramId} - ${u.reward} MATIC - Referrals: ${u.referrals}`;
-    lbDiv.appendChild(div);
-  });
-}
-renderLeaderboard();
-
-// Simulate adding referral
-function addReferral(newId){
-  const exists = leaderboard.find(u=>u.telegramId===newId);
-  if(!exists){
-    leaderboard.push({telegramId:newId,referrals:1,reward:0.05});
-  } else {
-    exists.referrals += 1;
-    exists.reward += 0.05;
-  }
-  localStorage.setItem("leaderboard",JSON.stringify(leaderboard));
-  renderLeaderboard();
-}
-</script>
-
-</body>
-</html>
