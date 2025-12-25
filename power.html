@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mining Power</title>
+<style>
+body{
+  margin:0;
+  font-family:system-ui, -apple-system, BlinkMacSystemFont;
+  background:linear-gradient(180deg,#4b168d,#6a2bbf);
+  color:#fff;
+}
+
+/* HEADER */
+.header{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  background:#3a0d6f;
+  text-align:center;
+  padding:12px 0;
+  font-weight:700;
+  z-index:1000;
+}
+
+.container{
+  padding:16px;
+  padding-top:64px;
+  max-width:480px;
+  margin:auto;
+}
+
+.card{
+  background:rgba(255,255,255,0.08);
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:16px;
+  text-align:center;
+}
+
+.button{
+  width:100%;
+  background:linear-gradient(90deg,#ffcc00,#ff8800);
+  border:none;
+  padding:14px;
+  border-radius:14px;
+  font-size:18px;
+  font-weight:700;
+  color:#000;
+  margin-bottom:12px;
+  cursor:pointer;
+}
+
+/* FOOTER */
+.footer{
+  display:flex;
+  justify-content:space-around;
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#3a0d6f;
+  padding:10px 0;
+}
+
+.footer div{
+  text-align:center;
+  font-size:12px;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">Mining Power</div>
+
+<div class="container">
+
+  <div class="card">
+    <h3>⚡ Daily Reward</h3>
+    <p>Claim 1 Mining Power</p>
+    <button class="button" id="dailyReward">Claim</button>
+  </div>
+
+  <div class="card">
+    <h3>🔋 Recharge Power</h3>
+    <button class="button" id="recharge1">Recharge 1</button>
+    <button class="button" id="recharge2">Recharge 2</button>
+    <button class="button" id="recharge3">Recharge 3</button>
+    <button class="button" id="recharge4">Recharge 4</button>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>🏠<br>Home</div>
+  <div>⚡<br>Mining</div>
+  <div>💼<br>Wallet</div>
+  <div>👥<br>Referrals</div>
+</div>
+
+<script>
+// Daily Reward button (placeholder for Monetag tracking)
+document.getElementById("dailyReward").addEventListener("click",()=>{
+  alert("1 Mining Power claimed! Monetag tracking can be implemented here.");
+});
+
+// Recharge buttons linked to short links
+document.getElementById("recharge1").addEventListener("click",()=>{window.open("https://short.link/1","_blank");});
+document.getElementById("recharge2").addEventListener("click",()=>{window.open("https://short.link/2","_blank");});
+document.getElementById("recharge3").addEventListener("click",()=>{window.open("https://short.link/3","_blank");});
+document.getElementById("recharge4").addEventListener("click",()=>{window.open("https://short.link/4","_blank");});
+</script>
+
+</body>
+</html>
