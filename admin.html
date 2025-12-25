@@ -7,116 +7,108 @@
 <style>
 body{
   margin:0;
-  font-family:Arial, sans-serif;
+  font-family:system-ui, -apple-system, BlinkMacSystemFont;
   background:#0b0f1a;
   color:#fff;
 }
 .container{
-  padding:20px;
-  max-width:500px;
+  padding:16px;
+  max-width:480px;
   margin:auto;
+  padding-top:20px;
 }
-h2{text-align:center; margin-bottom:20px;}
-input,button{
+h2{text-align:center;margin-bottom:20px;}
+input, button{
   width:100%;
   padding:10px;
   margin-bottom:10px;
   border-radius:6px;
   border:none;
-  font-size:16px;
 }
-input{background:#1c2240; color:#fff;}
-button{background:#4caf50; color:#fff; cursor:pointer;}
+input{background:#151a2e;color:#fff;}
+button{background:#2ecc71;color:#fff;font-weight:700;cursor:pointer;}
 .offer{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  background:#151a2e;
+  background:#1c2240;
   padding:10px;
-  border-radius:6px;
-  margin-bottom:10px;
+  border-radius:8px;
+  margin-bottom:8px;
 }
-.offer-details{
-  flex:1;
-}
-.remove-btn{
+.offer button{
   background:#e74c3c;
-  padding:5px 10px;
-  border-radius:4px;
+  border:none;
+  padding:6px 10px;
+  border-radius:6px;
+  color:#fff;
   cursor:pointer;
 }
 </style>
 </head>
 <body>
+
 <div class="container">
   <h2>Admin Panel - Offers</h2>
 
-  <!-- ADD OFFER -->
   <input type="text" id="offerName" placeholder="Offer Name">
-  <input type="text" id="offerReward" placeholder="Reward (e.g., 0.05 MATIC)">
-  <input type="text" id="offerLink" placeholder="Offer Link">
-  <button onclick="addOffer()">Add Offer</button>
+  <input type="text" id="offerReward" placeholder="Reward e.g 0.05 MATIC">
+  <input type="text" id="offerLink" placeholder="Offer Link (URL)">
+  <button id="addOfferBtn">Add Offer</button>
 
-  <hr style="border:1px solid #222; margin:20px 0;">
-
-  <!-- EXISTING OFFERS -->
+  <h3>Current Offers</h3>
   <div id="offersList"></div>
 </div>
 
 <script>
 let offers = JSON.parse(localStorage.getItem("offers")) || [];
 
-function renderOffers(){
-  const offersList = document.getElementById("offersList");
-  offersList.innerHTML = "";
-  if(offers.length===0){
-    offersList.innerHTML="<p>No offers yet</p>";
-    return;
-  }
-  offers.forEach((o, index)=>{
-    const div = document.createElement("div");
+const offersList = document.getElementById("offersList");
+const addBtn = document.getElementById("addOfferBtn");
+
+function renderOffersAdmin(){
+  offersList.innerHTML="";
+  offers.forEach((o,index)=>{
+    const div=document.createElement("div");
     div.className="offer";
     div.innerHTML=`
-      <div class="offer-details">
+      <div>
         <strong>${o.name}</strong><br>
         <small>${o.reward}</small><br>
-        <small>${o.link}</small>
+        <small style="color:#9cff9c">${o.link}</small>
       </div>
-      <button class="remove-btn" onclick="removeOffer(${index})">Remove</button>
+      <button onclick="removeOffer(${index})">Remove</button>
     `;
     offersList.appendChild(div);
   });
 }
 
-function addOffer(){
-  const name = document.getElementById("offerName").value.trim();
-  const reward = document.getElementById("offerReward").value.trim();
-  const link = document.getElementById("offerLink").value.trim();
+function removeOffer(index){
+  if(confirm("Do you want to remove this offer?")){
+    offers.splice(index,1);
+    localStorage.setItem("offers",JSON.stringify(offers));
+    renderOffersAdmin();
+  }
+}
 
+addBtn.addEventListener("click",()=>{
+  const name=document.getElementById("offerName").value.trim();
+  const reward=document.getElementById("offerReward").value.trim();
+  const link=document.getElementById("offerLink").value.trim();
   if(!name || !reward || !link){
-    alert("Please fill all fields");
+    alert("Fill all fields");
     return;
   }
-
   offers.push({name,reward,link});
-  localStorage.setItem("offers", JSON.stringify(offers));
-  renderOffers();
-
-  // clear input fields
+  localStorage.setItem("offers",JSON.stringify(offers));
+  renderOffersAdmin();
   document.getElementById("offerName").value="";
   document.getElementById("offerReward").value="";
   document.getElementById("offerLink").value="";
-}
+});
 
-function removeOffer(index){
-  // directly remove without confirmation
-  offers.splice(index,1);
-  localStorage.setItem("offers", JSON.stringify(offers));
-  renderOffers();
-}
-
-// initial render
-renderOffers();
+renderOffersAdmin();
 </script>
+
 </body>
 </html>
