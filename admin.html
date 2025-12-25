@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin – Manage Offers</title>
+
+<style>
+body{
+  margin:0;
+  font-family:system-ui;
+  background:#4b168d;
+  color:#fff;
+}
+.container{
+  max-width:480px;
+  margin:auto;
+  padding:16px;
+}
+input,select,button{
+  width:100%;
+  padding:12px;
+  margin-bottom:10px;
+  border-radius:10px;
+  border:none;
+}
+button{
+  background:#ffcc00;
+  font-weight:700;
+}
+.offer{
+  background:rgba(255,255,255,0.15);
+  padding:12px;
+  border-radius:12px;
+  margin-bottom:10px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h2>🔐 Admin – Manage Offers</h2>
+
+<input id="name" placeholder="Offer name">
+<input id="desc" placeholder="Offer description">
+<input id="reward" placeholder="Reward e.g +0.001 MATIC">
+<input id="link" placeholder="Redirect link (https://...)">
+
+<button onclick="addOffer()">Add Offer</button>
+
+<hr>
+
+<div id="list"></div>
+</div>
+
+<script>
+let offers = JSON.parse(localStorage.getItem("offers")) || [];
+const list=document.getElementById("list");
+
+function render(){
+  list.innerHTML="";
+  offers.forEach((o,i)=>{
+    list.innerHTML+=`
+      <div class="offer">
+        <b>${o.name}</b><br>
+        ${o.reward}<br>
+        <button onclick="removeOffer(${i})">Remove</button>
+      </div>
+    `;
+  });
+}
+
+function addOffer(){
+  offers.push({
+    name:name.value,
+    desc:desc.value,
+    reward:reward.value,
+    link:link.value
+  });
+  localStorage.setItem("offers",JSON.stringify(offers));
+  render();
+}
+
+function removeOffer(i){
+  if(confirm("Remove this offer?")){
+    offers.splice(i,1);
+    localStorage.setItem("offers",JSON.stringify(offers));
+    render();
+  }
+}
+
+render();
+</script>
+</body>
+</html>
