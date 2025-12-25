@@ -1,95 +1,119 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin – Manage Offers</title>
+<title>Admin Panel</title>
 
 <style>
 body{
   margin:0;
-  font-family:system-ui;
-  background:#4b168d;
+  font-family:Arial, sans-serif;
+  background:#0b0f1a;
   color:#fff;
 }
 .container{
-  max-width:480px;
-  margin:auto;
-  padding:16px;
+  padding:15px;
 }
-input,select,button{
+input{
   width:100%;
-  padding:12px;
+  padding:10px;
   margin-bottom:10px;
-  border-radius:10px;
+  border-radius:6px;
   border:none;
 }
 button{
-  background:#ffcc00;
-  font-weight:700;
+  padding:10px;
+  width:100%;
+  background:#4caf50;
+  border:none;
+  color:#fff;
+  border-radius:6px;
+  cursor:pointer;
 }
 .offer{
-  background:rgba(255,255,255,0.15);
-  padding:12px;
-  border-radius:12px;
-  margin-bottom:10px;
+  background:#1c2240;
+  padding:10px;
+  border-radius:8px;
+  margin-top:10px;
+}
+.remove{
+  background:#e53935;
+  margin-top:8px;
 }
 </style>
 </head>
 
 <body>
+
 <div class="container">
-<h2>🔐 Admin – Manage Offers</h2>
+  <h2>ADMIN – OFFERS PANEL</h2>
 
-<input id="name" placeholder="Offer name">
-<input id="desc" placeholder="Offer description">
-<input id="reward" placeholder="Reward e.g +0.001 MATIC">
-<input id="link" placeholder="Redirect link (https://...)">
+  <input id="name" placeholder="Offer name">
+  <input id="desc" placeholder="Offer description">
+  <input id="reward" placeholder="Reward (e.g 0.05 MATIC)">
+  <input id="link" placeholder="Offer redirect link">
 
-<button onclick="addOffer()">Add Offer</button>
+  <button onclick="addOffer()">Add Offer</button>
 
-<hr>
-
-<div id="list"></div>
+  <h3 style="margin-top:20px;">Existing Offers</h3>
+  <div id="list"></div>
 </div>
 
 <script>
 let offers = JSON.parse(localStorage.getItem("offers")) || [];
-const list=document.getElementById("list");
+const list = document.getElementById("list");
 
 function render(){
-  list.innerHTML="";
+  list.innerHTML = "";
   offers.forEach((o,i)=>{
-    list.innerHTML+=`
-      <div class="offer">
-        <b>${o.name}</b><br>
-        ${o.reward}<br>
-        <button onclick="removeOffer(${i})">Remove</button>
-      </div>
+    const div = document.createElement("div");
+    div.className="offer";
+    div.innerHTML=`
+      <strong>${o.name}</strong><br>
+      <small>${o.desc}</small><br>
+      <small>${o.reward}</small>
+      <button class="remove" onclick="removeOffer(${i})">
+        Remove Offer
+      </button>
     `;
+    list.appendChild(div);
   });
 }
 
 function addOffer(){
+  if(!name.value || !reward.value || !link.value){
+    alert("Fill all required fields");
+    return;
+  }
+
   offers.push({
-    name:name.value,
-    desc:desc.value,
-    reward:reward.value,
-    link:link.value
+    name: name.value.trim(),
+    desc: desc.value.trim(),
+    reward: reward.value.trim(),
+    link: link.value.trim()
   });
-  localStorage.setItem("offers",JSON.stringify(offers));
+
+  localStorage.setItem("offers", JSON.stringify(offers));
+
+  name.value="";
+  desc.value="";
+  reward.value="";
+  link.value="";
+
   render();
 }
 
 function removeOffer(i){
-  if(confirm("Remove this offer?")){
+  if(confirm("Are you sure you want to remove this offer?")){
     offers.splice(i,1);
-    localStorage.setItem("offers",JSON.stringify(offers));
+    localStorage.setItem("offers", JSON.stringify(offers));
     render();
   }
 }
 
 render();
 </script>
+
 </body>
 </html>
