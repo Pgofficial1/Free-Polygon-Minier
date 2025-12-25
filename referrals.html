@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Referrals</title>
+<style>
+body{
+  margin:0;
+  font-family:system-ui, -apple-system, BlinkMacSystemFont;
+  background:linear-gradient(180deg,#4b168d,#6a2bbf);
+  color:#fff;
+}
+.header{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  background:#3a0d6f;
+  text-align:center;
+  padding:12px 0;
+  font-weight:700;
+  z-index:1000;
+}
+.container{
+  padding:16px;
+  padding-top:64px;
+  max-width:480px;
+  margin:auto;
+}
+.card{
+  background:rgba(255,255,255,0.08);
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:16px;
+}
+input{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  margin-bottom:8px;
+}
+.footer{
+  display:flex;
+  justify-content:space-around;
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#3a0d6f;
+  padding:10px 0;
+}
+.footer div{
+  text-align:center;
+  font-size:12px;
+}
+.leaderboard div{
+  padding:8px;
+  border-bottom:1px solid rgba(255,255,255,0.2);
+}
+</style>
+</head>
+<body>
+
+<div class="header">Referrals</div>
+
+<div class="container">
+
+  <div class="card">
+    <h3>Your Referral Link</h3>
+    <input type="text" id="refLink" readonly>
+    <button id="copyBtn">Copy Link</button>
+  </div>
+
+  <div class="card">
+    <h3>Monthly Leaderboard</h3>
+    <div class="leaderboard" id="leaderboard"></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div>🏠<br>Home</div>
+  <div>⚡<br>Mining</div>
+  <div>💼<br>Wallet</div>
+  <div>👥<br>Referrals</div>
+</div>
+
+<script>
+// Simulated Telegram user ID
+const userId = "12345678";
+
+// Generate referral link
+const refLinkInput = document.getElementById("refLink");
+refLinkInput.value = `https://yourapp.com/?ref=${userId}`;
+
+// Copy button
+document.getElementById("copyBtn").addEventListener("click",()=>{
+  refLinkInput.select();
+  document.execCommand("copy");
+  alert("Referral link copied!");
+});
+
+// Simulated referral leaderboard
+let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [
+  {telegramId:"1001",reward:10},
+  {telegramId:"1002",reward:5},
+  {telegramId:"1003",reward:3},
+  {telegramId:"1004",reward:2},
+  {telegramId:"1005",reward:1},
+  {telegramId:"1006",reward:1},
+  {telegramId:"1007",reward:1},
+  {telegramId:"1008",reward:1},
+  {telegramId:"1009",reward:1},
+  {telegramId:"1010",reward:1},
+];
+
+const lbDiv = document.getElementById("leaderboard");
+function renderLeaderboard(){
+  lbDiv.innerHTML="";
+  leaderboard.forEach((u,i)=>{
+    const div = document.createElement("div");
+    div.innerHTML = `${i+1}. ${u.telegramId} - ${u.reward} MATIC`;
+    lbDiv.appendChild(div);
+  });
+}
+renderLeaderboard();
+
+// Simulate adding referral
+function addReferral(newId){
+  const exists = leaderboard.find(u=>u.telegramId===newId);
+  if(!exists){
+    leaderboard.push({telegramId:newId,reward:0.05});
+    localStorage.setItem("leaderboard",JSON.stringify(leaderboard));
+    renderLeaderboard();
+  }
+}
+</script>
+
+</body>
+</html>
