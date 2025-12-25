@@ -12,20 +12,35 @@ body{
   background:#0b0f1a;
   color:#fff;
 }
+
+/* HEADER (IMEONGEZWA TU) */
+.header{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  background:#11162a;
+  text-align:center;
+  padding:14px 0;
+  font-weight:bold;
+  border-bottom:1px solid #222;
+  z-index:1000;
+}
+
+/* CONTENT */
 .container{
   padding:15px;
-  padding-bottom:80px;
+  padding-top:70px;     /* nafasi ya header */
+  padding-bottom:80px;  /* nafasi ya footer */
 }
-h2{
-  text-align:center;
-  margin-bottom:15px;
-}
+
 .card{
   background:#151a2e;
   padding:15px;
   border-radius:10px;
   margin-bottom:15px;
 }
+
 .offer{
   display:flex;
   justify-content:space-between;
@@ -35,6 +50,7 @@ h2{
   border-radius:8px;
   margin-bottom:10px;
 }
+
 .offer button{
   background:#4caf50;
   border:none;
@@ -43,6 +59,8 @@ h2{
   border-radius:6px;
   cursor:pointer;
 }
+
+/* FOOTER (HAIJAGUSWA) */
 .footer{
   position:fixed;
   bottom:0;
@@ -54,6 +72,7 @@ h2{
   padding:10px 0;
   border-top:1px solid #222;
 }
+
 .footer div{
   text-align:center;
   font-size:13px;
@@ -63,10 +82,12 @@ h2{
 
 <body>
 
-<div class="container">
+<!-- HEADER -->
+<div class="header">
+  FREE POLYGON MINER
+</div>
 
-  <!-- APP TITLE -->
-  <h2>FREE POLYGON MINER</h2>
+<div class="container">
 
   <!-- MINING POWER -->
   <div class="card">
@@ -111,9 +132,7 @@ function renderOffers(){
         <small>${o.desc}</small><br>
         <small style="color:#9cff9c">${o.reward}</small>
       </div>
-      <button type="button" onclick="goOffer('${o.link}')">
-        Start
-      </button>
+      <button onclick="goOffer('${o.link}')">Start</button>
     `;
     offersDiv.appendChild(div);
   });
