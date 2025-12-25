@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wallet</title>
+<style>
+body{
+  margin:0;
+  font-family:system-ui, -apple-system, BlinkMacSystemFont;
+  background:linear-gradient(180deg,#4b168d,#6a2bbf);
+  color:#fff;
+}
+.header{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  background:#3a0d6f;
+  text-align:center;
+  padding:12px 0;
+  font-weight:700;
+  z-index:1000;
+}
+.container{
+  padding:16px;
+  padding-top:64px;
+  max-width:480px;
+  margin:auto;
+}
+.card{
+  background:rgba(255,255,255,0.08);
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:16px;
+}
+input, button{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  margin-top:8px;
+  font-size:16px;
+}
+button{
+  background:linear-gradient(90deg,#ffcc00,#ff8800);
+  font-weight:700;
+  cursor:pointer;
+}
+.footer{
+  display:flex;
+  justify-content:space-around;
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#3a0d6f;
+  padding:10px 0;
+}
+.footer div{
+  text-align:center;
+  font-size:12px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">Wallet</div>
+
+<div class="container">
+
+  <div class="card">
+    <h3>FaucetPay Email</h3>
+    <input type="email" id="faucetEmail" placeholder="Enter your FaucetPay email">
+    <button id="saveEmail">Save Email</button>
+    <small style="color:#9cff9c;">This email will be used for withdrawals only for your account.</small>
+  </div>
+
+  <div class="card">
+    <h3>Withdraw MATIC</h3>
+    <input type="number" id="withdrawAmount" placeholder="Amount to withdraw" min="0" step="0.01">
+    <button id="withdrawBtn">Withdraw</button>
+    <small id="withdrawInfo" style="color:#ffd84d;display:block;margin-top:8px;"></small>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div>🏠<br>Home</div>
+  <div>⚡<br>Mining</div>
+  <div>💼<br>Wallet</div>
+  <div>👥<br>Referrals</div>
+</div>
+
+<script>
+const faucetEmailInput = document.getElementById("faucetEmail");
+const saveEmailBtn = document.getElementById("saveEmail");
+const withdrawAmountInput = document.getElementById("withdrawAmount");
+const withdrawBtn = document.getElementById("withdrawBtn");
+const withdrawInfo = document.getElementById("withdrawInfo");
+
+// Save FaucetPay email locally (for this user only)
+saveEmailBtn.addEventListener("click",()=>{
+  const email = faucetEmailInput.value.trim();
+  if(!email){
+    alert("Please enter a valid email.");
+    return;
+  }
+  localStorage.setItem("faucetEmail",email);
+  alert("FaucetPay email saved!");
+});
+
+// Withdraw logic
+withdrawBtn.addEventListener("click",()=>{
+  const email = localStorage.getItem("faucetEmail");
+  if(!email){
+    alert("Please save your FaucetPay email first.");
+    return;
+  }
+  const amount = parseFloat(withdrawAmountInput.value);
+  if(isNaN(amount) || amount < 0.2){
+    alert("Minimum withdraw is 0.2 MATIC");
+    return;
+  }
+  const faucetFee = 0.03;
+  const managementFee = amount * 0.1;
+  const totalDeduction = faucetFee + managementFee;
+  const received = amount - totalDeduction;
+  
+  withdrawInfo.innerText = `Withdraw Details:
+  Amount: ${amount} MATIC
+  FaucetPay Fee: ${faucetFee} MATIC
+  Management Fee: ${managementFee.toFixed(2)} MATIC
+  You will receive: ${received.toFixed(2)} MATIC
+  Email: ${email}`;
+
+  // Placeholder for FaucetPay API integration
+  alert("Withdraw request ready. Integrate with FaucetPay API to process.");
+});
+</script>
+
+</body>
+</html>
